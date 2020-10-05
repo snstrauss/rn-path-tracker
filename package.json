@@ -5,11 +5,17 @@
     "android": "expo start --android",
     "ios": "expo start --ios",
     "web": "expo start --web",
-    "eject": "expo eject"
+    "eject": "expo eject",
+    "server": "nodemon ./server/server.js"
   },
   "dependencies": {
+    "bcrypt": "^5.0.0",
     "expo": "~39.0.2",
     "expo-status-bar": "~1.0.2",
+    "express": "^4.17.1",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^5.10.7",
+    "nodemon": "^2.0.4",
     "react": "16.13.1",
     "react-dom": "16.13.1",
     "react-native": "https://github.com/expo/react-native/archive/sdk-39.0.3.tar.gz",
