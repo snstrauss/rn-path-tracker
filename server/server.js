@@ -1,5 +1,6 @@
 // we used a simple require for the user model file, just to make it run and register the model
 require('./models/user');
+require('./models/track');
 
 const express = require('express');
 const mongoose = require('mongoose');
@@ -7,6 +8,7 @@ const bodyParser = require('body-parser');
 
 const authRoutes = require('./routes/authRoutes');
 const requireAuth = require('./middleware/requireAuth');
+const trackRoutes = require('./routes/trackRoutes');
 
 // MONGO_URI generated and copied from cloud.mongodb.com, where the instance is actually living
 const MONGO_URI = 'mongodb+srv://mongoAdmin:mongoPassword@sush-cluster.yjndg.mongodb.net/pathTracker?retryWrites=true&w=majority';
@@ -18,6 +20,8 @@ const app = express();
 app.use(bodyParser.json());
 // routes related to user access - signup, sign-in etc...
 app.use(authRoutes);
+// routes related to tracks - creating, adding etc..
+app.use(trackRoutes);
 
 console.log('try connect to mongoDB');
 // connect to mongo instance
