@@ -6,15 +6,19 @@
     "ios": "expo start --ios",
     "web": "expo start --web",
     "eject": "expo eject",
-    "server": "nodemon ./server/server.js"
+    "server": "nodemon ./server/server.js",
+    "tunnel": "lt --port 3333 --subdomain trackserver"
   },
   "dependencies": {
+    "@react-native-community/async-storage": "^1.12.1",
     "@react-native-community/masked-view": "^0.1.10",
+    "axios": "^0.20.0",
     "bcrypt": "^5.0.0",
     "expo": "~39.0.2",
     "expo-status-bar": "~1.0.2",
     "express": "^4.17.1",
     "jsonwebtoken": "^8.5.1",
+    "localtunnel": "^2.0.0",
     "mongoose": "^5.10.7",
     "nodemon": "^2.0.4",
     "react": "16.13.1",
