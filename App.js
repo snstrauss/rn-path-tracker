@@ -1,11 +1,13 @@
+import React from 'react';
+
 import { createAppContainer, createSwitchNavigator } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
 import { createBottomTabNavigator } from 'react-navigation-tabs';
+import AuthProvider from './client/context/AuthProvider';
 
 import AccountScreen from './client/screens/AccountScreen';
 import CreateTrackScreen from './client/screens/CreateTrackScreen';
-import SigninScreen from './client/screens/SigninScreen';
-import SignupScreen from './client/screens/SignupScreen';
+import LoginForm from './client/screens/LoginForm';
 import TrackDetailsScreen from './client/screens/TrackDetailsScreen';
 import TrackListScreen from './client/screens/TrackListScreen';
 
@@ -33,8 +35,8 @@ import TrackListScreen from './client/screens/TrackListScreen';
 
 const switchNavigator = createSwitchNavigator({
   loginFlow: createStackNavigator({
-    signup: SignupScreen,
-    signin: SigninScreen
+    signin: LoginForm('signin'),
+    signup: LoginForm('signup'),
   }),
   mainFlow: createBottomTabNavigator({
     listFlow: createStackNavigator({
@@ -46,4 +48,14 @@ const switchNavigator = createSwitchNavigator({
   })
 });
 
-export default createAppContainer(switchNavigator);
+const AppRoutes = createAppContainer(switchNavigator);
+
+export default function App(){
+  return (
+    <>
+      <AuthProvider>
+        <AppRoutes />
+      </AuthProvider>
+    </>
+  )
+}
