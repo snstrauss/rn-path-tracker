@@ -13,11 +13,25 @@ function callTrackApi(route, credentials){
     }));
 }
 
-
 export const signup = callTrackApi.bind(null, 'signup');
 export const signin = callTrackApi.bind(null, 'signin');
+export const logout = AsyncStorage.clear;
+
+export function checkExistingToken(){
+    return new Promise((resolve, reject) => {
+        AsyncStorage.getItem(USER_TOKEN).then(token => {
+            if(token){
+                resolve(token);
+            } else {
+                reject(token);
+            }
+        })
+    })
+}
+
 
 export default {
     signup,
-    signin
+    signin,
+    checkExistingToken
 }
