@@ -1,7 +1,7 @@
-import AsyncStorage from '@react-native-community/async-storage';
 import React, { useContext, useEffect, useState } from 'react';
 import { StyleSheet, TouchableOpacity, View } from 'react-native';
 import { Button, Input, Text } from 'react-native-elements';
+import Error from '../components/Error';
 import Spacer from '../components/Spacer';
 import { AuthContext } from '../context/AuthProvider';
 import loginService from '../services/login.service';
@@ -11,16 +11,6 @@ const S = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         marginBottom: 50
-    },
-    error: {
-        borderWidth: 5,
-        borderColor: 'firebrick',
-        color: 'firebrick',
-        fontSize: 20,
-        padding: 5,
-        flex: 1,
-        textAlign: 'center',
-        textAlignVertical: 'center'
     },
     otherScreenLink: {
         color: 'dodgerblue'
@@ -88,7 +78,7 @@ export default function LoginForm(type){
         return (
             <>
                 {
-                    finishedCheckExisting
+                    (finishedCheckExisting || (type === 'signup'))
                     ?
                     <View style={S.container}>
                         <Spacer>
@@ -111,14 +101,12 @@ export default function LoginForm(type){
                         {
                             auth.errorMessage &&
                             <TouchableOpacity onLongPress={() => authMethods.showError()}>
-                                <Text style={S.error}>{auth.errorMessage}</Text>
+                                <Error message={auth.errorMessage}/>
                             </TouchableOpacity>
                         }
                     </View>
                     :
-                    <Text style={S.error}>
-                        WAITT
-                    </Text>
+                    <Error message="WAITTTTRT!"/>
                 }
             </>
         )
