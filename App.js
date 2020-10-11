@@ -3,7 +3,9 @@ import React from 'react';
 import { createAppContainer, createSwitchNavigator } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
 import { createBottomTabNavigator } from 'react-navigation-tabs';
+
 import AuthProvider from './client/context/AuthProvider';
+import LocationProvider from './client/context/LocationProvider';
 
 import AccountScreen from './client/screens/AccountScreen';
 import CreateTrackScreen from './client/screens/CreateTrackScreen';
@@ -54,7 +56,9 @@ export default function App(){
   return (
     <>
       <AuthProvider>
-        <AppRoutes />
+        <LocationProvider>
+          <AppRoutes />
+        </LocationProvider>
       </AuthProvider>
     </>
   )
