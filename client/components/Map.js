@@ -1,6 +1,8 @@
-import React from 'react';
-import { StyleSheet, View } from 'react-native';
+import React, { useContext } from 'react';
+import { ActivityIndicator, StyleSheet, View } from 'react-native';
 import MapView, { Polyline } from 'react-native-maps';
+import { LocationContext } from '../context/LocationProvider';
+import Error from './Error';
 
 const S = StyleSheet.create({
     container: {
@@ -12,31 +14,38 @@ const S = StyleSheet.create({
         borderWidth: 2,
         borderColor: 'green',
         flex: 1
+    },
+    spinner: {
+        borderWidth: 4,
+        borderColor: 'green',
+        marginTop: 200
     }
 });
 
 export default function Map(){
 
-    const points = Array(20).fill(0).map((_, i) => ({
-        latitude: 37.33233 + (i * 0.001),
-        longitude: -122.03121 + (i * 0.001)
-    }));
+    const { state: { currentLocation, locations } } = useContext(LocationContext);
+    const justPts = locations && locations.map(p => p.coords);
 
     return (
         <View style={S.container}>
-            <MapView
-                style={S.map}
-                initialRegion={{
-                    latitude: 37.33233,
-                    longitude: -122.03121,
-                    latitudeDelta: 0.01,
-                    longitudeDelta: 0.01}}
-            >
-                <Polyline
-                    coordinates={points}
-                    strokeWidth={3}
-                    strokeColor="#2c78db" />
-            </MapView>
+            {
+                currentLocation
+                ?
+                <MapView
+                    style={S.map}
+                    initialRegion={justPts[0]}
+                    region={currentLocation}
+                >
+                    <Polyline
+                        coordinates={justPts}
+                        strokeWidth={3}
+                        strokeColor="#2c78db" />
+                </MapView>
+                :
+                <Error message="WAITTT" />
+
+            }
         </View>
     )
 }
