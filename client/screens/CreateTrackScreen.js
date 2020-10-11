@@ -1,13 +1,12 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext } from 'react';
 import { StyleSheet, View, TouchableOpacity } from 'react-native';
-import { requestPermissionsAsync, watchPositionAsync, Accuracy } from 'expo-location';
 import { Text } from 'react-native-elements';
-import { SafeAreaView } from 'react-navigation';
+import { NavigationEvents, SafeAreaView } from 'react-navigation';
 import Error from '../components/Error';
 import Map from '../components/Map';
 import TrackForm from '../components/TrackForm';
 import { LocationContext } from '../context/LocationProvider';
-import { mockLocationChange } from '../services/location.service';
+import useLocation from '../hooks/useLocation';
 
 const S = StyleSheet.create({
     safe: {
@@ -24,41 +23,10 @@ const S = StyleSheet.create({
     }
 });
 
-let stopInterval;
 export default function CreateTrackScreen(){
 
-    const [error, setError] = useState();
-
     const { state: locationState, methods: locationMethods } = useContext(LocationContext);
-
-    if(locationState.locations.length > 9){
-        stopInterval();
-    }
-
-    useEffect(() => {
-        async function startWatch(){
-            try {
-                await requestPermissionsAsync();
-                await watchPositionAsync({
-                    accuracy: Accuracy.BestForNavigation,
-                    timeInterval: 1000,
-                    distanceInterval: 10
-                }, (location) => {
-                    if(location.mocked !== false){
-                        locationMethods.add(location);
-                    }
-                });
-
-                stopInterval = mockLocationChange();
-            } catch (error) {
-                setError('Location is needed obviously');
-            }
-
-        }
-
-        startWatch();
-    }, []);
-
+    const [locationError] = useLocation(locationMethods.add, locationState.recording);
 
     return (
         <SafeAreaView forceInset={{top: 'always'}} style={S.safe}>
@@ -66,13 +34,17 @@ export default function CreateTrackScreen(){
             <Map points={locationState.locations} />
             <TrackForm />
             {
-                error &&
+                locationError &&
                 <View style={S.error}>
                     <TouchableOpacity onLongPress={() => setError()}>
-                        <Error message={error} />
+                        <Error message={locationError} />
                     </TouchableOpacity>
                 </View>
             }
+
+            <NavigationEvents
+                onDidFocus={locationMethods.start}
+                onWillBlur={locationMethods.stop}/>
         </SafeAreaView>
     )
 }

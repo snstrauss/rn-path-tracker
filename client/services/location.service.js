@@ -1,9 +1,8 @@
 import * as Location from 'expo-location';
 
-const TEN_METERS = 0.00001;
+const TEN_METERS = 0.0001;
 
 let ptCount = 0;
-let locationInterval;
 export function mockLocationChange(){
 
     function getDelta(idx){
@@ -22,21 +21,20 @@ export function mockLocationChange(){
                 altitudeAccuracy: 5,
                 altitude: 5,
                 longitude: 34.7804667 + delta,
-                latitude: 32.0513884 + delta,
-                latitudeDelta: delta,
-                longitudeDelta: delta
+                latitude: 32.0513884 + delta
             }
         };
     }
 
-    locationInterval = setInterval(() => {
+    const locationInteraval = setInterval(() => {
+        console.count('interval');
         Location.EventEmitter.emit('Expo.locationChanged', {
             watchId: Location._getCurrentWatchId(),
             location: getPoint(ptCount++)
         });
-    }, 1000);
+    }, 500);
 
     return () => {
-        clearInterval(locationInterval);
+        clearInterval(locationInteraval);
     }
 }
