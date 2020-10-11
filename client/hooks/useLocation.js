@@ -1,8 +1,6 @@
 import { Accuracy, requestPermissionsAsync, watchPositionAsync } from "expo-location";
 import { useEffect, useState } from "react";
-import { mockLocationChange } from "../services/location.service";
 
-let stopInterval;
 let listenSubscriber;
 export default function useLocation(onGetLocation, isRecording){
 
@@ -11,13 +9,13 @@ export default function useLocation(onGetLocation, isRecording){
     async function startWatch(){
         try {
             await requestPermissionsAsync();
+            console.log('start listener');
             listenSubscriber = await watchPositionAsync({
                 accuracy: Accuracy.BestForNavigation,
                 timeInterval: 1000,
                 distanceInterval: 1
             }, onGetLocation);
-
-            stopInterval = mockLocationChange();
+            console.log('has listener');
         } catch (error) {
             setError('Location is needed obviously');
         }
@@ -27,8 +25,8 @@ export default function useLocation(onGetLocation, isRecording){
     useEffect(() => {
         if(isRecording){
             startWatch();
-        } else if(stopInterval) {
-            stopInterval()
+        } else if(listenSubscriber) {
+            console.log('stop listener');
             listenSubscriber.remove();
         }
     }, [isRecording])
